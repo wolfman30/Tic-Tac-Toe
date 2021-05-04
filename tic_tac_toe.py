@@ -1,35 +1,47 @@
-def display_grid(gridList): #displays the Tic-Tac-Toe board
+def validate_player_letter_choice(player_letter_choice):
     
-    for i in gridList:
+    while player_letter_choice not in ["X", "O"]:
+        player_letter_choice = input("Sorry, need an X or an O. Try again.").upper() 
+        
+
+def display_game_board(list_of_board_positions): 
+    
+    for i in list_of_board_positions:
         print("\t" * 6, "  |   |   ")
         print("\t" * 6, f"{i[0]} | {i[1]} | {i[2]}")
         print("\t" * 6, "  |   |   ")
-        if i == [7, 8, 9]:
-            print(' ')
-        else:
-            print("\t" * 6, '-' * 9)
+        if i == [7, 8, 9]: break
+        print("\t" * 6, '-' * 9)
 
-def player_letter():     #assigned letter X or O to player 1 and player 2
+
+def ask_player1_for_letter():     
     
-    player1 = input("Player 1, Which letter do you choose: X or O? ").upper()
-    player2 = 0
+    player1_letter = input("Player 1, Which letter do you choose: X or O? ").upper()
     
-    while player1 not in ["X", "O"]:
+    return player1_letter
+
+def assign_letters_to_players():
+
+    player1_letter = ask_player1_for_letter()
+    
+    validate_player_letter_choice(player1_letter)
+
+    if player1_letter == "X": player2_letter = "O" 
         
-        player1 = input("Sorry, need an X or an O. Try again.").upper()
+    else: player2_letter = "X"
+        
+    return player1_letter, player2_letter
+
+def display_player_letters(player1_letter):
     
-    if player1 == "X":
-        player2 = "O"
+    if player1_letter == "X":
         print("Player 1 chose X, so Player 2 is an O!")
     else:
-        player2 = "X"
-        print("Player 1 chose O, therefore Player 2 is an X!")
-        
-    return player1, player2
+        print("Player 1 chose O, so Player 2 is an X!")
 
-def reset():   #asks for a replay of the game and resets the game board back to original numbers
+def reset():  
     
-    global grid_num_l, player1, player2, game_active 
+    global game_board_positions, player1, player2, game_active 
     
     while True: 
     
@@ -41,7 +53,7 @@ def reset():   #asks for a replay of the game and resets the game board back to 
 
             grid_num_l = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
-            display_grid(grid_num_l)
+            display_game_board(game_board_positions)
             
             break
 
@@ -50,23 +62,25 @@ def reset():   #asks for a replay of the game and resets the game board back to 
             
 
         else:
-            grid_num_l = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+            game_board_positions = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
             game_active = False 
             break
         
     
     return game_active
     
+
 def game_winner(triple, x):
     
     global player1, player2, game_active
 
-    if (triple in grid_num_l) or triple in [[grid_num_l[0][0], grid_num_l[1][0], grid_num_l[2][0]],  
-                                  [grid_num_l[0][1], grid_num_l[1][1], grid_num_l[2][1]],
-                                  [grid_num_l[0][2], grid_num_l[1][2], grid_num_l[2][2]],
-                                  [grid_num_l[0][0], grid_num_l[1][1], grid_num_l[2][2]],
-                                  [grid_num_l[0][2], grid_num_l[1][1], grid_num_l[2][0]]]:
-        
+    if (triple in game_board_positions) or triple in [[game_board_positions[0][0],game_board_positions[1][0], 
+                                                                                game_board_positions[2][0]],  
+                      [game_board_positions[0][1], game_board_positions[1][1], game_board_positions[2][1]],
+                      [game_board_positions[0][2], game_board_positions[1][2], game_board_positions[2][2]],
+                      [game_board_positions[0][0], game_board_positions[1][1], game_board_positions[2][2]],
+                      [game_board_positions[0][2], game_board_positions[1][1], game_board_positions[2][0]]]:
+
         if player1 == x:
             print("Player 1 Wins!")
 
@@ -75,12 +89,12 @@ def game_winner(triple, x):
 
         return reset()
             
+
+
 def draw():
     
-    global grid_num_l
-    
     count = 0
-    for i in grid_num_l:
+    for i in game_board_positions:
         for j in i:
             if type(j) == str:
                 count += 1
@@ -96,12 +110,11 @@ def player_move(r, c, position, move, letter):
     
     if move == position:
         
-        if type(grid_num_l[r][c]) == str:
-            move = int(input("Already occupied. Try another position. "))
-            
-        else:
-            grid_num_l[r][c] = letter
-            display_grid(grid_num_l)
+        if type(game_board_positions[r][c]) == str:
+            move = int(input("Already occupied. Try another position. ")) 
+        
+        game_board_positions[r][c] = letter
+        display_game_board(game_board_positions)
 
 def player_input(player, letter, player_num):
     
@@ -131,18 +144,20 @@ def player_input(player, letter, player_num):
         player_move(2, 1, 8, move, letter)
 
         player_move(2, 2, 9, move, letter)
+            
 
-grid_num_l = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] #list contain numbers representing grid positions
+game_board_positions = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] 
 
-player1, player2 = player_letter() #assigns players to their respective letter: X or O. 
+player1, player2 = assign_letters_to_players()
+display_player_letters(player1) 
 
 game_active = True
 
 def main():
     
-    global grid_num_l
+    global game_board_positions
 
-    display_grid(grid_num_l)
+    display_game_board(game_board_positions)
     
     game_winner(['X', 'X', 'X'], 'X')
     game_winner(['O', 'O', 'O'], 'O')
@@ -196,11 +211,5 @@ def main():
                 draw()
                 
                 
-
-main()
-
-
-            
-
-
-        
+if __name__ == "__main__":
+    main()   
