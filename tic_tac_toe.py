@@ -1,9 +1,3 @@
-def validate_player_letter_choice(player_letter_choice):
-    
-    while player_letter_choice not in ["X", "O"]:
-        player_letter_choice = input("Sorry, need an X or an O. Try again.").upper() 
-        
-
 def display_game_board(list_of_board_positions): 
     
     for i in list_of_board_positions:
@@ -13,31 +7,33 @@ def display_game_board(list_of_board_positions):
         if i == [7, 8, 9]: break
         print("\t" * 6, '-' * 9)
 
-
 def ask_player1_for_letter():     
     
     player1_letter = input("Player 1, Which letter do you choose: X or O? ").upper()
     
     return player1_letter
 
-def assign_letters_to_players():
-
-    player1_letter = ask_player1_for_letter()
+def validate_player1_letter_choice(letter_choice):
     
-    validate_player_letter_choice(player1_letter)
+    while letter_choice not in ["X", "O"]:
+        letter_choice = input("Sorry, need an X or an O. Try again.").upper() 
+        
+    return letter_choice
+        
+
+def assign_letter_to_player2():
 
     if player1_letter == "X": player2_letter = "O" 
         
     else: player2_letter = "X"
         
-    return player1_letter, player2_letter
+    return player2_letter
 
 def display_player_letters(player1_letter):
     
-    if player1_letter == "X":
-        print("Player 1 chose X, so Player 2 is an O!")
-    else:
-        print("Player 1 chose O, so Player 2 is an X!")
+    if player1_letter == "X": print("Player 1 chose X, so Player 2 is an O!")
+        
+    else: print("Player 1 chose O, so Player 2 is an X!")
 
 def reset():  
     
@@ -148,8 +144,11 @@ def player_input(player, letter, player_num):
 
 game_board_positions = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] 
 
-player1, player2 = assign_letters_to_players()
-display_player_letters(player1) 
+player1_letter = ask_player1_for_letter()
+player1_letter = validate_player1_letter_choice(player1_letter)
+
+player2_letter = assign_letter_to_player2()
+display_player_letters(player1_letter) 
 
 game_active = True
 
