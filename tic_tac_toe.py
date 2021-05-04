@@ -23,11 +23,11 @@ def validate_player1_letter_choice(letter_choice):
 
 def assign_letter_to_player2():
 
-    if player1_letter == "X": player2_letter = "O" 
+    if player1 == "X": player2 = "O" 
         
-    else: player2_letter = "X"
+    else: player2 = "X"
         
-    return player2_letter
+    return player2
 
 def display_player_letters(player1_letter):
     
@@ -86,7 +86,6 @@ def game_winner(triple, x):
         return reset()
             
 
-
 def draw():
     
     count = 0
@@ -102,15 +101,19 @@ def draw():
 
     return count
 
-def player_move(r, c, position, move, letter):
+def player_move(r, c, position, move, letter): #4 arguments is too many!
     
     if move == position:
         
-        if type(game_board_positions[r][c]) == str:
-            move = int(input("Already occupied. Try another position. ")) 
+        while type(game_board_positions[r][c]) == str:
+            move = input("Already occupied. Try another position. ")
+            r = player_move_to_position_map[str(move)][0]
+            c = player_move_to_position_map[str(move)][1]
+            
         
-        game_board_positions[r][c] = letter
+        game_board_positions[r][c] = letter  
         display_game_board(game_board_positions)
+        
 
 def player_input(player, letter, player_num):
     
@@ -144,11 +147,14 @@ def player_input(player, letter, player_num):
 
 game_board_positions = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] 
 
-player1_letter = ask_player1_for_letter()
-player1_letter = validate_player1_letter_choice(player1_letter)
+player_move_to_position_map = {'1': (0, 0), '2': (0, 1), '3': (0, 2), '4': (1, 0), '5': (1, 1),
+                               '6': (1, 2), '7': (2, 0), '8': (2, 1), '9': (2, 2)}
 
-player2_letter = assign_letter_to_player2()
-display_player_letters(player1_letter) 
+player1 = ask_player1_for_letter()
+player1 = validate_player1_letter_choice(player1)
+
+player2 = assign_letter_to_player2()
+display_player_letters(player1) 
 
 game_active = True
 
