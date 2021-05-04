@@ -7,11 +7,13 @@ def display_game_board(list_of_board_positions):
         if i == [7, 8, 9]: break
         print("\t" * 6, '-' * 9)
 
+
 def ask_player1_for_letter():     
     
     player1_letter = input("Player 1, Which letter do you choose: X or O? ").upper()
     
     return player1_letter
+
 
 def validate_player1_letter_choice(letter_choice):
     
@@ -29,11 +31,13 @@ def assign_letter_to_player2():
         
     return player2
 
+
 def display_player_letters(player1_letter):
     
     if player1_letter == "X": print("Player 1 chose X, so Player 2 is an O!")
         
     else: print("Player 1 chose O, so Player 2 is an X!")
+
 
 def reset():  
     
@@ -45,9 +49,11 @@ def reset():
 
         if ask == 'Y':
 
-            player1, player2 = player_letter()
+            player1 = ask_player1_for_letter()
+            player1 = validate_player1_letter_choice(player1)
+            player2 = assign_letter_to_player2()
 
-            grid_num_l = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+            game_board_positions = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
             display_game_board(game_board_positions)
             
@@ -100,6 +106,7 @@ def draw():
         return reset()
 
     return count
+
 
 def player_move(r, c, position, move, letter): #4 arguments is too many!
     
@@ -157,6 +164,7 @@ player2 = assign_letter_to_player2()
 display_player_letters(player1) 
 
 game_active = True
+
 
 def main():
     
